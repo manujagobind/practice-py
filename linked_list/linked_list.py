@@ -186,19 +186,62 @@ class LinkedList(object):
         else:
             raise Exception('Too few items in list')
 
-    #Reverses the linked list
+    #Reverses a linked list
     def reverse(self):
-        #No need to reverse if list has 0 or 1 element
-        if self.head.has_next():
-            start = end = self.head
-            #Extract last node
-            while end.has_next():
-                end = end.get_next()
-            #Set head to last node
-            self.set_head(end)
-            while start != self.head:
-                end.set_next(start)
-                end = end.get_next()
-                start = start.get_next()
-            #Terminate list to avoid loop
-            end.set_next(None)
+        #No need to reverse if list has 0 or 1 node
+        if self.head:
+
+            a = self.head
+            if a.has_next():
+                b = a.get_next()
+            else:
+                #List has only 1 element
+                return
+
+            if b.has_next():
+                #List has three or more elements
+                a.set_next(None)
+                while b.has_next():
+                    c = b.get_next()
+                    b.set_next(a)
+                    a, b = b, c
+                b.set_next(a)
+                self.head = b
+            else:
+                #List has two elements
+                a.set_next(None)
+                b.set_next(a)
+                self.head = b
+
+
+    #Swaps nodes in a linked list without swapping the data
+    def swap_nodes(self, data1, data2):
+        if data1 == data2:
+            return
+
+        current1 = self.head
+        previous1 = None
+        while current1 and current1.get_data() != data1:
+            previous1 = current1
+            current1 = current1.get_next()
+
+        current2 = self.head
+        previous2 = None
+        while current2 and current2.get_data() != data2:
+            previous2 = current2
+            current2 = current2.get_next()
+
+        if current1 is None or current2 is None:
+            return
+
+        if previous1:
+            previous1.set_next(current2)
+        else:
+            self.set_head(current2)
+        current2.set_next(current1)
+
+        if previous2:
+            previous2.set_next(current1)
+        else:
+            self.set_head(current1)
+        current1.set_next(current2)
