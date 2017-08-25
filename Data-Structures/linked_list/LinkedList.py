@@ -87,4 +87,116 @@ class LinkedList(object):
         else:
             self.set_head(None)
         del cur
-        
+
+    def find(self, key):
+        """Returns node with given key."""
+        cur = self.get_head()
+        while cur:
+            if cur.get_key() is key:
+                return cur
+            cur = cur.get_next()
+
+    def reverse(self):
+        """Reverses the list."""
+        if self.get_head() and self.get_head().has_next():
+            cur, prev = self.get_head(), None
+            while cur:                
+                next_ = cur.get_next()
+                cur.set_prev(next_)
+                cur.set_next(prev)
+                prev = cur
+                cur = next_
+            self.set_head(prev)
+
+    def node_at(self, position):
+        """Returns of node at given position."""
+        if position > 0:
+            cur = self.get_head()
+            count = 1
+            while cur and count < position:
+                cur = cur.get_next()
+                count += 1
+            return cur
+        return None
+
+    def node_from_end(self, position):
+        """Returns node at given position from end."""
+        if position > 0:
+            temp = self.get_head()
+            count = 0
+            while temp and count < position:
+                temp = temp.get_next()
+                count += 1
+            if temp:
+                cur = self.get_head()
+                while temp:
+                    cur = cur.get_next()
+                    temp = temp.get_next()
+                return cur
+        return None
+
+    def insert_at(self, key, position):
+        """Inserts a node at the given position."""
+        if position > 0:
+            cur, prev = self.get_head(), None
+            count = 1
+            while cur and count < position:
+                prev = cur
+                cur = cur.get_next()
+                count += 1
+            if count == position:
+                node = Node(key)
+                if prev:
+                    prev.set_next(node)
+                    node.set_prev(prev)
+                else:
+                    self.set_head(node)
+                node.set_next(cur)
+
+    def erase_at(self, position):
+        """Removes node at the given position."""
+        if position > 0:
+            cur, prev = self.get_head(), None
+            count = 1
+            while cur and count < position:
+                prev = cur
+                cur = cur.get_next()
+                count += 1
+            if cur:
+                cur = cur.get_next()
+            if prev:
+                prev.set_next(cur)
+            else:
+                self.set_head(cur)
+
+    def rotate(self, k, clockwise=False):
+        """Rotates the list by k positions in the given driection."""
+        sz = self.size()
+        k %= sz
+        if clockwise:
+            k = sz - k
+        if k > 0:
+            cur, prev = self.get_head(), None
+            count = 0
+            while cur and count < k:
+                prev = cur
+                cur = cur.get_next()
+                count += 1
+            prev.set_next(None)
+            cur.set_prev(None)
+            temp = cur                
+            while temp.has_next():
+                temp = temp.get_next()
+            temp.set_next(self.get_head())
+            self.get_head().set_prev(temp)
+            self.set_head(cur)
+
+    def mid(self):
+        """Return middle node."""
+        slow = fast = self.get_head()
+        while fast and fast.has_next():
+            fast = fast.get_next()
+            if fast.has_next():
+                slow = slow.get_next()
+                fast = fast.get_next()
+        return slow
