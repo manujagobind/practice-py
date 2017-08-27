@@ -6,6 +6,10 @@ class BinaryTreeNode(object):
         self._height = 0
         self._left, self._right = None, None
 
+    def display(self, end=None):
+        """Prints the contents of the current node."""
+        print(self._key, self._height, '\t', end=end)
+
     def get_key(self):
         """Return the node's key."""
         return self._key
